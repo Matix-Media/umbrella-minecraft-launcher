@@ -50,6 +50,7 @@ const selectProfileOpen = ref(false);
                     <button
                         class="dropdown"
                         @mouseup="selectAccountOpen = true"
+                        :disabled="accountManager.accounts.length <= 1"
                         :title="
                             accountManager.accounts.length <= 1
                                 ? t('play.moreAccountsRequired')
@@ -214,6 +215,10 @@ const selectProfileOpen = ref(false);
 
                     &:hover {
                         background-color: #39463b;
+                    }
+
+                    &:disabled {
+                        cursor: default;
                     }
                 }
             }

@@ -54,6 +54,14 @@ export const useAccountManager = defineStore("accountManager", {
                     account.profile.name,
                     `(${account.profile.id})`
                 );
+                if (
+                    this.accounts.find(
+                        (_account) => _account.profile.id == account.profile.id
+                    )
+                ) {
+                    console.log("Skipping, account already loaded");
+                    continue;
+                }
                 this.add({
                     ...(
                         (await msmc.mcTokenToolbox.fromToken(
