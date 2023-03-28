@@ -2,7 +2,8 @@
     "play": {
         "title": "Play",
         "play": "Play",
-        "noAccountAdded": "No accounts added!"
+        "noAccountAdded": "No accounts added!",
+        "moreAccountsRequired": "You need at least two accounts to switch between them!"
     },
     "profiles": {
         "title": "Profiles"

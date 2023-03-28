@@ -47,13 +47,16 @@ export const useAccountManager = defineStore("accountManager", {
             );
 
             for (const account of loadedAccounts) {
-                this.accounts.push(
-                    await msmc.mcTokenToolbox.fromToken(
-                        authManager,
-                        account,
-                        true
-                    )
-                );
+                this.accounts.push({
+                    ...(
+                        (await msmc.mcTokenToolbox.fromToken(
+                            authManager,
+                            account,
+                            true
+                        )) as _msmc.Minecraft
+                    ).getToken(true),
+                    selected: account.selected,
+                });
             }
         },
     },

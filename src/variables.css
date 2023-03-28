@@ -12,4 +12,5 @@
   --shadow-sm-primary: 0px 4px 10px rgba(12, 39, 15, 0.15);
   --shadow-sm-danger: 0px 4px 10px rgba(212, 29, 29, 0.15);
   --shadow-sm: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  --shadow-md: 4px 10px 20px rgba(0, 0, 0, 0.3);
 }

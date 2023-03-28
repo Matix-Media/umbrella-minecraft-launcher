@@ -50,6 +50,11 @@ const selectProfileOpen = ref(false);
                     <button
                         class="dropdown"
                         @mouseup="selectAccountOpen = true"
+                        :title="
+                            accountManager.accounts.length <= 1
+                                ? t('play.moreAccountsRequired')
+                                : ''
+                        "
                     >
                         <mdicon name="menu-down" size="45" />
                     </button>
@@ -97,7 +102,7 @@ const selectProfileOpen = ref(false);
     border-radius: 4px;
     overflow: hidden;
     color: white;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
 
     &.select-account {
         display: flex;
