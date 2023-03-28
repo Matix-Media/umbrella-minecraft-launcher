@@ -62,8 +62,8 @@ export const useAccountManager = defineStore("accountManager", {
                     ).getToken(true),
                     selected: account.selected,
                 });
-                await this.save();
             }
+            await this.save();
         },
     },
 });
