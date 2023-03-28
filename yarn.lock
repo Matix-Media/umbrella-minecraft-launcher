@@ -2777,13 +2777,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gmll@npm:^2.0.6":
-  version: 2.0.6
-  resolution: "gmll@npm:2.0.6"
+"gmll@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "gmll@npm:3.0.4"
   dependencies:
     node-fetch: 2.x
     tslib: ^2.3.1
-  checksum: e2dfef4e5f6b21b6eccf48b71ead3043413497a5698838668c0279f073df035541bebccea379d84688a36be6e26ed272168b90b92e953505717de1de67eaf4d4
+  checksum: 7328b665715de48b214c4ca74bf0f5e9e903db977d9903aa0f033650db840104f4782be15670a18cb25b72f7e05b3544ae06c42a26c0f6238ef01a1f7fea0023
   languageName: node
   linkType: hard
 
@@ -5192,7 +5192,7 @@ __metadata:
     "@vitejs/plugin-vue": ^4.1.0
     concurrently: ^7.6.0
     express: ^4.18.2
-    gmll: ^2.0.6
+    gmll: ^3.0.4
     mdi-vue: ^3.0.13
     msmc: ^4.1.0
     nw: sdk
@@ -5201,6 +5201,7 @@ __metadata:
     pinia: ^2.0.33
     sass: ^1.60.0
     typescript: ^4.9.3
+    v-click-outside: ^3.2.0
     vite: ^4.2.0
     vue: ^3.2.47
     vue-i18n: 9
@@ -5355,6 +5356,13 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: c81095493225ecfc28add49c106ca4f09cdf56bc66731aa8dabc2edbbccb1e1bfe2de6a115e5c6a380d3ea166d1636410b62ef216bb07b3feb1cfde1d95d5080
+  languageName: node
+  linkType: hard
+
+"v-click-outside@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "v-click-outside@npm:3.2.0"
+  checksum: 4d72b2a4863c7a28f380894bf7742b47018e8aceb479f9a7774806efcb290941b420e14b7cf8272b3bfb5318713aed4ad7f3fe327d6a869bed7b420cf1d39774
   languageName: node
   linkType: hard
 

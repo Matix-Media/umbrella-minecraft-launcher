@@ -1,13 +1,15 @@
 {
     "play": {
         "title": "Play",
-        "play": "Play"
+        "play": "Play",
+        "noAccountAdded": "No accounts added!"
     },
     "profiles": {
         "title": "Profiles"
     },
     "accounts": {
         "title": "Accounts",
+        "noAccounts": "You haven't added any accounts yet.",
         "add": "Add",
         "type": {
             "microsoft": "Microsoft"

@@ -1,16 +1,20 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, computed, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { TransitionSlide } from "@morev/vue-transitions";
-import { useAccounts } from "@/stores/accounts";
+import vClickOutside from "v-click-outside";
+import { useAccountManager } from "@/stores/accountManager";
 import { useInstances } from "@/stores/instances";
 
 // Components
 import PlayerHead from "../../components/PlayerHead.vue";
+import Overlay from "@/components/Overlay.vue";
 
 const { t } = useI18n();
-const accounts = useAccounts();
+const accountManager = useAccountManager();
 const instances = useInstances();
+const selectAccountOpen = ref(false);
+const selectProfileOpen = ref(false);
 </script>
 
 <template>
@@ -33,11 +37,20 @@ const instances = useInstances();
                 <div class="account">
                     <player-head
                         class="head"
-                        :uuid="accounts.selected.uuid"
-                        v-if="accounts.selected"
+                        :uuid="accountManager.selected.profile.id"
+                        v-if="accountManager.selected"
                     />
-                    <div class="head alt" v-else></div>
-                    <button class="dropdown">
+                    <div
+                        class="head alt"
+                        v-else
+                        :title="t('play.noAccountAdded')"
+                    >
+                        <mdicon name="account-alert-outline" size="45" />
+                    </div>
+                    <button
+                        class="dropdown"
+                        @mouseup="selectAccountOpen = true"
+                    >
                         <mdicon name="menu-down" size="45" />
                     </button>
                 </div>
@@ -57,9 +70,65 @@ const instances = useInstances();
 
         <div class="bottom-blur"></div>
     </div>
+    <overlay v-model="selectAccountOpen" class="">
+        <div class="select-popup select-account">
+            <div
+                class="account-item"
+                v-for="account in accountManager.accounts"
+                @click="accountManager.select(account)"
+                :class="{
+                    selected:
+                        account.profile.id ==
+                        accountManager.selected?.profile.id,
+                }"
+            >
+                <player-head class="head" :uuid="account.profile.id" />
+                <span>{{ account.profile.name }}</span>
+            </div>
+        </div>
+    </overlay>
 </template>
 
 <style lang="scss" scoped>
+.select-popup {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg);
+    border-radius: 4px;
+    overflow: hidden;
+    color: white;
+    box-shadow: var(--shadow-sm);
+
+    &.select-account {
+        display: flex;
+        flex-direction: column;
+
+        .account-item {
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            padding-right: 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+
+            &:hover {
+                background-color: var(--very-muted);
+            }
+
+            &.selected {
+                background-color: var(--muted);
+            }
+
+            .head {
+                height: 45px;
+                width: 45px;
+                border-radius: 4px;
+                margin-right: 8px;
+            }
+        }
+    }
+}
+
 .play {
     position: relative;
     min-height: 100vh;
@@ -117,6 +186,14 @@ const instances = useInstances();
                     width: 55px;
                     border-radius: 4px 0 0 4px;
                     box-shadow: var(--shadow-sm);
+                    background-color: #304033;
+
+                    &.alt {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: var(--very-muted);
+                    }
                 }
 
                 .dropdown {
@@ -128,6 +205,11 @@ const instances = useInstances();
                     align-items: center;
                     justify-content: center;
                     border: none;
+                    transition: background-color 0.2s;
+
+                    &:hover {
+                        background-color: #39463b;
+                    }
                 }
             }
 
@@ -146,6 +228,11 @@ const instances = useInstances();
                     flex-direction: column;
                     justify-content: center;
                     padding: 0 20px;
+                    transition: background-color 0.2s, box-shadow 0.2s;
+
+                    &:hover {
+                        background-color: var(--primary-2);
+                    }
 
                     .action {
                         font-size: 24px;
@@ -169,6 +256,11 @@ const instances = useInstances();
                     align-items: center;
                     justify-content: center;
                     border: none;
+                    transition: background-color 0.2s, box-shadow 0.2s;
+
+                    &:hover {
+                        background-color: var(--primary-2);
+                    }
                 }
             }
         }

@@ -1,19 +1,33 @@
 <script lang="ts" setup>
 import VButton from "@/components/VButton.vue";
-import { useAccounts } from "@/stores/accounts";
+import { useAccountManager } from "@/stores/accountManager";
 import { useI18n } from "vue-i18n";
-import PlayerHead from "@/components/PlayerHead.vue";
-const msmc = require("msmc");
+import type _msmc from "msmc";
+import { ref } from "vue";
+
 // Components
+import PlayerHead from "@/components/PlayerHead.vue";
+import LoadingOverlay from "@/components/LoadingOverlay.vue";
+
+const msmc = require("msmc");
 
 const { t } = useI18n();
-const accounts = useAccounts();
-const authManager = new msmc.Auth("select_account");
+const accountManager = useAccountManager();
+const authManager: _msmc.Auth = new msmc.Auth("select_account");
+const loading = ref(false);
 
 async function addAccount() {
-    const xboxManager = await authManager.launch("nwjs");
-    const token = await xboxManager.getMinecraft();
-    console.log("Auth successful:", token);
+    loading.value = true;
+    try {
+        const xboxManager = await authManager.launch("nwjs");
+        const minecraft = await xboxManager.getMinecraft();
+        const token = minecraft.getToken(true);
+        accountManager.add(token);
+        await accountManager.save();
+    } catch (err) {
+        console.error("Error adding account:", err);
+    }
+    loading.value = false;
 }
 </script>
 
@@ -29,17 +43,23 @@ async function addAccount() {
 
         <div
             class="account"
-            v-for="account in accounts.accounts"
-            :key="account.uuid"
+            v-for="account in accountManager.accounts"
+            :key="account.profile.id"
         >
-            <player-head :uuid="account.uuid" class="head" />
+            <player-head :uuid="account.profile.id" class="head" />
             <div class="info">
-                <span class="username">{{ account.username }}</span>
+                <span class="username">{{ account.profile.name }}</span>
                 <span class="type">{{ t("accounts.type.microsoft") }}</span>
             </div>
             <v-button icon="delete" variant="danger" icon-size="35" />
         </div>
+
+        <div class="no-accounts" v-if="accountManager.accounts.length == 0">
+            <mdicon name="account-alert-outline" size="106" />
+            <span>{{ t("accounts.noAccounts") }}</span>
+        </div>
     </div>
+    <loading-overlay :loading="loading" />
 </template>
 
 <style lang="scss" scoped>
@@ -50,6 +70,16 @@ async function addAccount() {
         margin-bottom: 25px;
     }
 
+    .no-accounts {
+        margin-top: 50px;
+        color: var(--very-muted);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-weight: 600;
+        font-size: 24px;
+    }
+
     .account {
         display: grid;
         align-items: center;
@@ -58,6 +88,7 @@ async function addAccount() {
         background-color: var(--bg-2);
         border-radius: 4px;
         color: white;
+        margin-bottom: 10px;
 
         .head {
             width: 45px;

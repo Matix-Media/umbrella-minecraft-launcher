@@ -3,6 +3,10 @@
   --primary: #3cb043;
   --primary-2: #48c74f;
   --danger: #d41d1d;
+  --muted: rgba(0, 0, 0, 0.5);
+  --very-muted: rgba(0, 0, 0, 0.3);
+  --highlight: rgba(255, 255, 255, 0.1);
+  --highlight-2: rgba(255, 255, 255, 0.1);
   --bg: #202224;
   --bg-2: #121415;
   --shadow-sm-primary: 0px 4px 10px rgba(12, 39, 15, 0.15);

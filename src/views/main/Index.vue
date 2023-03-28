@@ -1,10 +1,28 @@
 <script lang="ts" setup>
+import { useAccountManager } from "@/stores/accountManager";
+import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { TransitionFade } from "@morev/vue-transitions";
 
 // https://stackoverflow.com/questions/20648881/can-you-css-blur-based-on-a-gradient-mask
 const { t } = useI18n();
 const route = useRoute();
+const loading = ref(true);
+const accountManager = useAccountManager();
+
+onMounted(async () => {
+    try {
+        await accountManager.load();
+    } catch (err) {
+        console.error("Error during loading:", err);
+    }
+    loading.value = false;
+    console.log("Done loading");
+    setTimeout(() => {
+        document.body.classList.remove("loading");
+    }, 1000);
+});
 </script>
 
 <template>
@@ -22,10 +40,35 @@ const route = useRoute();
             {{ t("settings.title") }}
         </router-link>
     </div>
-    <router-view />
+    <router-view v-if="!loading" />
+    <transition-fade :duration="1000">
+        <div class="loading" v-if="loading">
+            <mdicon name="loading" spin size="48" />
+        </div>
+    </transition-fade>
 </template>
 
+<style lang="scss">
+body.loading {
+    overflow: hidden;
+}
+</style>
+
 <style lang="scss" scoped>
+.loading {
+    position: absolute;
+    background-color: var(--bg);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
 .nav {
     position: absolute;
     top: 0;
