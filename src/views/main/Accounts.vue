@@ -3,7 +3,7 @@ import VButton from "@/components/VButton.vue";
 import { useAccounts } from "@/stores/accounts";
 import { useI18n } from "vue-i18n";
 import PlayerHead from "@/components/PlayerHead.vue";
-import msmc from "msmc";
+const msmc = require("msmc");
 // Components
 
 const { t } = useI18n();

@@ -1,9 +1,13 @@
 {
     "name": "umbrella-minecraft-launcher",
+    "displayName": "Umbrella Launcher",
+    "description": "Based on: https://github.com/nwutils/nw-vue3-boilerplate/blob/main/server.js",
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "main": "http://localhost:5173",
+    "main": "http://localhost:4175",
+    "node-remote": "http://localhost:4175",
+    "node-main": "",
     "window": {
         "title": "Umbrella Launcher",
         "width": 906,
@@ -11,15 +15,22 @@
         "resizable": false
     },
     "scripts": {
-        "vite:dev": "vite",
-        "vite:build": "vue-tsc && vite build",
-        "vite:preview": "vite preview",
-        "nw:dev": "nw .",
-        "dev": "yarn vite:dev & yarn nw:dev"
+        "dev": "concurrently npm:dev:web npm:dev:desktop",
+        "dev:web": "vite --port 4175 --strictPort",
+        "dev:desktop": "wait-on -c waitOnConfig.json http-get://localhost:4175 && nw .",
+        "start": "zx scripts/dev-build.mjs",
+        "dev-hmr": "zx scripts/dev-hmr.mjs",
+        "clean": "zx scripts/clean.mjs",
+        "typecheck": "tsc --noEmit",
+        "build": "zx scripts/build.mjs",
+        "compile-to-bin": "zx scripts/compile.mjs",
+        "package": "zx scripts/package.mjs"
     },
     "dependencies": {
         "@mdi/js": "^7.2.96",
         "@morev/vue-transitions": "^2.3.6",
+        "@types/nw.js": "^0.13.16",
+        "express": "^4.18.2",
         "gmll": "^2.0.6",
         "mdi-vue": "^3.0.13",
         "msmc": "^4.1.0",
@@ -31,10 +42,77 @@
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^4.1.0",
+        "concurrently": "^7.6.0",
         "nw-builder": "^4.1.1-beta.2",
+        "nwts-tools": "^0.3.6",
         "sass": "^1.60.0",
         "typescript": "^4.9.3",
         "vite": "^4.2.0",
-        "vue-tsc": "^1.2.0"
+        "vue-tsc": "^1.2.0",
+        "wait-on": "^7.0.1"
+    },
+    "build": {
+    "nwVersion": "v0.70.1",
+    "nwFlavor": "normal",
+    "targets": [
+      "zip",
+      "nsis7z"
+    ],
+    "files": [
+      "**/*"
+    ],
+    "excludes": [
+      "src/**/*",
+      "tests/**/*",
+      "public/**/*",
+      "dist-vue/**/*.js.map",
+      "dist-vue/**/*.css.map",
+      "dist-vue/**/*-legacy*",
+      ".editorconfig",
+      ".eslintignore",
+      ".eslintrc",
+      ".gitignore",
+      "CODE_OF_CONDUCT.md",
+      "index.html",
+      "jsconfig.json",
+      "package-lock.json",
+      "screenshot.png",
+      "vite.config.js",
+      "waitOnConfig.json"
+    ],
+    "strippedProperties": [
+      "ManifestComments",
+      "scripts",
+      "devDependencies",
+      "build"
+    ],
+    "overriddenProperties": {
+      "main": "http://localhost:4185",
+      "node-remote": "http://localhost:4185",
+      "node-main": "server.js",
+      "chromium-args": "--enable-spell-checking",
+      "window": {
+        "width": 960,
+        "height": 600,
+        "min_width": 700,
+        "min_height": 500,
+        "icon": "dist-vue/icon.png"
+      }
+    },
+    "win": {
+      "icon": "public/icon-256.ico"
+    },
+    "mac": {
+      "icon": "public/icon.icns"
+    },
+    "nsis": {
+      "icon": "public/icon-256.ico",
+      "unIcon": "public/icon.ico",
+      "languages": [
+        "English"
+      ],
+      "diffUpdaters": false,
+      "hashCalculation": true
     }
+  }
 }
