@@ -113,9 +113,11 @@ const selectProfileOpen = ref(false);
             display: flex;
             align-items: center;
             padding: 6px;
+            padding-left: 3px;
             padding-right: 20px;
+            border-left: 3px solid transparent;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, border 0.2s;
 
             &:hover {
                 background-color: var(--very-muted);
@@ -123,6 +125,9 @@ const selectProfileOpen = ref(false);
 
             &.selected {
                 background-color: var(--muted);
+                border-left: 3px solid var(--primary);
+                border-top-left-radius: 3px;
+                border-bottom-left-radius: 3px;
             }
 
             .head {
