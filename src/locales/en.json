@@ -1,0 +1,19 @@
+{
+    "play": {
+        "title": "Play",
+        "play": "Play"
+    },
+    "profiles": {
+        "title": "Profiles"
+    },
+    "accounts": {
+        "title": "Accounts",
+        "add": "Add",
+        "type": {
+            "microsoft": "Microsoft"
+        }
+    },
+    "settings": {
+        "title": "Settings"
+    }
+}

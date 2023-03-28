@@ -1,0 +1,62 @@
+<script lang="ts" setup>
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
+
+// https://stackoverflow.com/questions/20648881/can-you-css-blur-based-on-a-gradient-mask
+const { t } = useI18n();
+const route = useRoute();
+</script>
+
+<template>
+    <div class="nav" :class="{ 'light-bg': !route.meta.providesBackground }">
+        <router-link :to="{ name: 'Play' }">
+            {{ t("play.title") }}
+        </router-link>
+        <router-link :to="{ name: 'Profiles' }">
+            {{ t("profiles.title") }}
+        </router-link>
+        <router-link :to="{ name: 'Accounts' }">
+            {{ t("accounts.title") }}
+        </router-link>
+        <router-link :to="{ name: 'Settings' }">
+            {{ t("settings.title") }}
+        </router-link>
+    </div>
+    <router-view />
+</template>
+
+<style lang="scss" scoped>
+.nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    backdrop-filter: blur(7.5px);
+    background-color: rgba(0, 0, 0, 0.55);
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+
+    &.light-bg {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    a {
+        height: 100%;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 15px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+
+        &.router-link-active {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+    }
+}
+</style>
