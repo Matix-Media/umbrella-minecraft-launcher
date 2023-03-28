@@ -47,6 +47,11 @@ export const useAccountManager = defineStore("accountManager", {
             );
 
             for (const account of loadedAccounts) {
+                console.log(
+                    "Loading account:",
+                    account.profile.name,
+                    `(${account.profile.id})`
+                );
                 this.accounts.push({
                     ...(
                         (await msmc.mcTokenToolbox.fromToken(
@@ -57,6 +62,7 @@ export const useAccountManager = defineStore("accountManager", {
                     ).getToken(true),
                     selected: account.selected,
                 });
+                await this.save();
             }
         },
     },
