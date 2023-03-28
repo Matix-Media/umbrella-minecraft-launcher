@@ -17,20 +17,22 @@ export const useAccountManager = defineStore("accountManager", {
         },
     },
     actions: {
-        add(account: _msmc.MCToken) {
+        add(account: _msmc.MCToken | Account) {
             if (
                 this.accounts.find(
                     (_account) => _account.profile.id == account.profile.id
                 )
             )
                 return;
-            this.accounts.push({ ...account, selected: false });
+            if ("selected" in account) this.accounts.push(account);
+            else this.accounts.push({ ...account, selected: false });
         },
         select(account: Account) {
             for (const account of this.accounts) {
                 account.selected = false;
             }
             account.selected = true;
+            this.accounts = this.accounts;
         },
         async save() {
             const file = path.join(nw.App.dataPath, "accounts.json");
@@ -52,7 +54,7 @@ export const useAccountManager = defineStore("accountManager", {
                     account.profile.name,
                     `(${account.profile.id})`
                 );
-                this.accounts.push({
+                this.add({
                     ...(
                         (await msmc.mcTokenToolbox.fromToken(
                             authManager,
