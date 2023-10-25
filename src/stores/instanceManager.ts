@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-export const useInstances = defineStore("instances", {
+export const useInstanceManager = defineStore("instanceManager", {
     state: () => ({
         instances: [
             { name: "Minecraft 1.19.4 (Latest)", selected: true },

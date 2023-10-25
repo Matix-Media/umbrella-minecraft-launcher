@@ -4,7 +4,7 @@ import { useI18n } from "vue-i18n";
 import { TransitionSlide } from "@morev/vue-transitions";
 import vClickOutside from "v-click-outside";
 import { useAccountManager } from "@/stores/accountManager";
-import { useInstances } from "@/stores/instances";
+import { useInstanceManager } from "@/stores/instanceManager";
 
 // Components
 import PlayerHead from "../../components/PlayerHead.vue";
@@ -12,7 +12,7 @@ import Overlay from "@/components/Overlay.vue";
 
 const { t } = useI18n();
 const accountManager = useAccountManager();
-const instances = useInstances();
+const instanceManager = useInstanceManager();
 const selectAccountOpen = ref(false);
 const selectProfileOpen = ref(false);
 </script>
@@ -282,3 +282,4 @@ const selectProfileOpen = ref(false);
     }
 }
 </style>
+@/stores/instanceManager
