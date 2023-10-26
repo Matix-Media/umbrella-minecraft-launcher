@@ -11,7 +11,7 @@ function close() {
 
 <template>
     <transition-fade>
-        <div class="overlay" @click="close" v-if="modelValue">
+        <div class="overlay" @click.self="close" v-if="modelValue">
             <slot></slot>
         </div>
     </transition-fade>

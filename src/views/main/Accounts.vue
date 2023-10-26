@@ -4,8 +4,6 @@ import { useAccountManager } from "@/stores/accountManager";
 import { useI18n } from "vue-i18n";
 import type _msmc from "msmc";
 import { ref } from "vue";
-
-// Components
 import PlayerHead from "@/components/PlayerHead.vue";
 import LoadingOverlay from "@/components/LoadingOverlay.vue";
 
@@ -72,7 +70,7 @@ async function addAccount() {
 
     .no-accounts {
         margin-top: 50px;
-        color: var(--very-muted);
+        color: var(--highlight);
         display: flex;
         flex-direction: column;
         align-items: center;

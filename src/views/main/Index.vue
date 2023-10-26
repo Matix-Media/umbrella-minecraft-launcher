@@ -4,21 +4,29 @@ import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { TransitionFade } from "@morev/vue-transitions";
+import Logger from "@/lib/Logger";
+import { useInstanceManager } from "@/stores/instanceManager";
 
 // https://stackoverflow.com/questions/20648881/can-you-css-blur-based-on-a-gradient-mask
+const logger = new Logger("Root");
 const { t } = useI18n();
 const route = useRoute();
 const loading = ref(true);
+const loadingState = ref<"starting" | "accounts" | "minecraft">("starting");
 const accountManager = useAccountManager();
+const instanceManager = useInstanceManager();
 
 onMounted(async () => {
     try {
+        loadingState.value = "accounts";
         await accountManager.load();
+        loadingState.value = "minecraft";
+        await instanceManager.load();
     } catch (err) {
-        console.error("Error during loading:", err);
+        logger.error("Error during loading:", err);
     }
     loading.value = false;
-    console.log("Done loading");
+    logger.log("Done loading");
     setTimeout(() => {
         document.body.classList.remove("loading");
     }, 1000);
@@ -44,6 +52,9 @@ onMounted(async () => {
     <transition-fade :duration="1000">
         <div class="loading" v-if="loading">
             <mdicon name="loading" spin size="48" />
+            <p class="explaination">
+                {{ t("loading." + loadingState) }}
+            </p>
         </div>
     </transition-fade>
 </template>
@@ -64,9 +75,15 @@ body.loading {
     bottom: 0;
     z-index: 99;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     color: white;
+
+    .explaination {
+        color: var(--text-secondary);
+        font-weight: 600;
+    }
 }
 
 .nav {

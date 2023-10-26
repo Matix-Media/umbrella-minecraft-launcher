@@ -16,4 +16,8 @@ export default defineConfig({
         },
         extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
     },
+    define: {
+        __VUE_I18N_FULL_INSTALL__: true,
+        __VUE_I18N_LEGACY_API__: false,
+    },
 });

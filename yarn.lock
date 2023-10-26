@@ -2777,13 +2777,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gmll@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "gmll@npm:3.0.4"
+"gmll@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "gmll@npm:3.2.1"
   dependencies:
     node-fetch: 2.x
     tslib: ^2.3.1
-  checksum: 7328b665715de48b214c4ca74bf0f5e9e903db977d9903aa0f033650db840104f4782be15670a18cb25b72f7e05b3544ae06c42a26c0f6238ef01a1f7fea0023
+  checksum: c682f6ce71763a419a541d61547d05d6f020afdd74395550f330b0305e606c9e148fb4edead0fc464f2f98c1b31d489aef35acf2acc9d26d5d7a4b1f7b6914aa
   languageName: node
   linkType: hard
 
@@ -5192,7 +5192,7 @@ __metadata:
     "@vitejs/plugin-vue": ^4.1.0
     concurrently: ^7.6.0
     express: ^4.18.2
-    gmll: ^3.0.4
+    gmll: ^3.2.1
     mdi-vue: ^3.0.13
     msmc: ^4.1.0
     nw: sdk

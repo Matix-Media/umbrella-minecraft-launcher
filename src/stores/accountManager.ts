@@ -1,8 +1,12 @@
 import { defineStore } from "pinia";
+import Logger from "@/lib/Logger";
 import _msmc from "msmc";
 const msmc = require("msmc");
 const path = require("path");
 const fs = require("fs").promises;
+
+const logger = new Logger("AuthManager");
+const saveFile = path.join(nw.App.dataPath, "accounts.json");
 
 export const useAccountManager = defineStore("accountManager", {
     state: () => ({
@@ -35,21 +39,26 @@ export const useAccountManager = defineStore("accountManager", {
             this.accounts = this.accounts;
         },
         async save() {
-            const file = path.join(nw.App.dataPath, "accounts.json");
-            console.log("Saving to:", file);
-            await fs.writeFile(file, JSON.stringify(this.accounts));
+            logger.log("Saving to:", saveFile);
+            await fs.writeFile(saveFile, JSON.stringify(this.accounts));
         },
         async load() {
             const authManager = new msmc.Auth();
-            const file = path.join(nw.App.dataPath, "accounts.json");
+
+            try {
+                await fs.access(saveFile);
+            } catch (_) {
+                return;
+            }
+
             const loadedAccounts: Account[] = JSON.parse(
-                await fs.readFile(file, {
+                await fs.readFile(saveFile, {
                     encoding: "utf8",
                 })
             );
 
             for (const account of loadedAccounts) {
-                console.log(
+                logger.log(
                     "Loading account:",
                     account.profile.name,
                     `(${account.profile.id})`
@@ -59,7 +68,7 @@ export const useAccountManager = defineStore("accountManager", {
                         (_account) => _account.profile.id == account.profile.id
                     )
                 ) {
-                    console.log("Skipping, account already loaded");
+                    logger.log("Skipping, account already loaded");
                     continue;
                 }
                 this.add({

@@ -64,7 +64,7 @@ const selectProfileOpen = ref(false);
                     <button class="start">
                         <span class="action">{{ t("play.play") }}</span>
                         <span class="instance">{{
-                            instances.selected?.name
+                            instanceManager.selected?.instance.getName()
                         }}</span>
                     </button>
                     <button class="dropdown">
