@@ -15,47 +15,31 @@ const accountManager = useAccountManager();
 const instanceManager = useInstanceManager();
 const selectAccountOpen = ref(false);
 const selectProfileOpen = ref(false);
+
+async function selectAccount(id: string) {
+    await accountManager.select(id);
+    selectAccountOpen.value = false;
+}
 </script>
 
 <template>
     <div class="play">
         <div class="content">
-            <transition-slide
-                appear
-                :offset="[0, -150]"
-                :duration="1000"
-                :delay="100"
-            >
-                <img
-                    class="logo"
-                    src="@/assets/logos/java-edition.webp"
-                    alt="Minecraft: Java Edition"
-                />
+            <transition-slide appear :offset="[0, -150]" :duration="1000" :delay="100">
+                <img class="logo" src="@/assets/logos/java-edition.webp" alt="Minecraft: Java Edition" />
             </transition-slide>
 
             <div class="controls">
                 <div class="account">
-                    <player-head
-                        class="head"
-                        :uuid="accountManager.selected.profile.id"
-                        v-if="accountManager.selected"
-                    />
-                    <div
-                        class="head alt"
-                        v-else
-                        :title="t('play.noAccountAdded')"
-                    >
+                    <player-head class="head" :uuid="accountManager.selected.id" v-if="accountManager.selected" />
+                    <div class="head alt" v-else :title="t('play.noAccountAdded')">
                         <mdicon name="account-alert-outline" size="45" />
                     </div>
                     <button
                         class="dropdown"
                         @mouseup="selectAccountOpen = true"
                         :disabled="accountManager.accounts.length <= 1"
-                        :title="
-                            accountManager.accounts.length <= 1
-                                ? t('play.moreAccountsRequired')
-                                : ''
-                        "
+                        :title="accountManager.accounts.length <= 1 ? t('play.moreAccountsRequired') : ''"
                     >
                         <mdicon name="menu-down" size="45" />
                     </button>
@@ -63,9 +47,7 @@ const selectProfileOpen = ref(false);
                 <div class="profile">
                     <button class="start">
                         <span class="action">{{ t("play.play") }}</span>
-                        <span class="instance">{{
-                            instanceManager.selected?.instance.getName()
-                        }}</span>
+                        <span class="instance">{{ instanceManager.selected?.name }}</span>
                     </button>
                     <button class="dropdown">
                         <mdicon name="menu-down" size="45" />
@@ -81,15 +63,13 @@ const selectProfileOpen = ref(false);
             <div
                 class="account-item"
                 v-for="account in accountManager.accounts"
-                @click="accountManager.select(account)"
+                @click="selectAccount(account.id)"
                 :class="{
-                    selected:
-                        account.profile.id ==
-                        accountManager.selected?.profile.id,
+                    selected: account.id == accountManager.selected?.id,
                 }"
             >
-                <player-head class="head" :uuid="account.profile.id" />
-                <span>{{ account.profile.name }}</span>
+                <player-head class="head" :uuid="account.id" />
+                <span>{{ account.name }}</span>
             </div>
         </div>
     </overlay>
@@ -158,12 +138,7 @@ const selectProfileOpen = ref(false);
         right: 0;
         bottom: 0;
         backdrop-filter: blur(50px);
-        -webkit-mask: linear-gradient(
-            180deg,
-            transparent 0%,
-            transparent 76.41%,
-            black 93.65%
-        );
+        -webkit-mask: linear-gradient(180deg, transparent 0%, transparent 76.41%, black 93.65%);
     }
 
     .content {

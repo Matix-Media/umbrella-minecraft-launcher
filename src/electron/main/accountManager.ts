@@ -105,8 +105,14 @@ export default class AccountManager {
 
         for (const account of loadedAccounts) {
             AccountManager.LOGGER.log("Loading account:", account.profile.name, `(${account.profile.id})`);
-            if (this.accounts.find((_account) => _account.profile.id == account.profile.id)) {
+            let existingAccount = this.accounts.find((_account) => _account.profile.id == account.profile.id);
+            if (existingAccount != null) {
                 AccountManager.LOGGER.log("Skipping, account already loaded");
+                this.webContents.send("renderer:accountManager.add", {
+                    id: existingAccount.profile.id,
+                    name: existingAccount.profile.name,
+                    selected: existingAccount.selected,
+                } as RendererAccount);
                 continue;
             }
             this.add({
