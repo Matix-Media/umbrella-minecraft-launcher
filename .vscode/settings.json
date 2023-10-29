@@ -1,4 +1,5 @@
 {
     "recommendations": ["Vue.volar", "Vue.vscode-typescript-vue-plugin"],
-    "i18n-ally.localesPaths": ["src/locales"]
+    "i18n-ally.localesPaths": ["src/locales"],
+    "cSpell.words": ["gmll", "msmc", "xbox", "xuid"]
 }
