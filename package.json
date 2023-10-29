@@ -1,9 +1,9 @@
 {
-    "name": "vite-vue3-electron-ts-template",
+    "name": "umbrella-minecraft-launcher",
     "private": true,
     "version": "0.0.1",
-    "author": "Your Name",
-    "main": "dist/electron/main/main.js",
+    "author": "Matix-Media",
+    "main": "dist/electron/electron/main/main.js",
     "scripts": {
         "vite:dev": "vite",
         "vite:build": "vue-tsc --noEmit && vite build",
@@ -11,7 +11,7 @@
         "ts": "tsc",
         "watch": "tsc -w",
         "lint": "eslint -c .eslintrc --ext .ts ./src",
-        "app:dev": "tsc && concurrently vite \" electron .\" \"tsc -w\"",
+        "app:dev": "tsc --project tsconfig.electron.json && concurrently vite \" electron .\" \"tsc --project tsconfig.electron.json -w\"",
         "app:build": "npm run vite:build && tsc && electron-builder",
         "app:preview": "npm run vite:build && tsc && electron ."
     },
@@ -54,7 +54,7 @@
         "@morev/vue-transitions": "^2.3.6",
         "@types/nw.js": "^0.13.16",
         "express": "^4.18.2",
-        "gmll": "^3.2.1",
+        "gmll": "^3.3.2",
         "mdi-vue": "^3.0.13",
         "msmc": "^4.1.0",
         "pinia": "^2.0.33",

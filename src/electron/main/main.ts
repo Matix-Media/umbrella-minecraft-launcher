@@ -1,23 +1,23 @@
 import { join } from "path";
-import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import { app, BrowserWindow, dialog } from "electron";
+import AccountManager from "./accountManager";
+import Logger from "../../lib/Logger";
+import InstanceManager from "./instanceManager";
 
 const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
-
-async function handleFileOpen() {
-    const { canceled, filePaths } = await dialog.showOpenDialog({ title: "Open File" });
-    if (!canceled) {
-        return filePaths[0];
-    }
-}
+const logger = new Logger("Window");
 
 function createWindow() {
-    // Create the browser window.
+    // Create the browser window
+    logger.log("Loading preload from", join(__dirname, "./preload/preload.js"));
+    console.log("test");
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
+            preload: join(__dirname, "../preload/preload.js"),
         },
     });
 
@@ -33,14 +33,17 @@ function createWindow() {
     //     'http://localhost:3000' :
     //     join(__dirname, '../../index.html')
     // );
+    return mainWindow;
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-    ipcMain.handle("dialog:openFile", handleFileOpen);
-    createWindow();
+    const window = createWindow();
+    const accountManager = new AccountManager(window.webContents);
+    const instanceManager = new InstanceManager(window.webContents);
+
     app.on("activate", function () {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.

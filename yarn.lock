@@ -2994,7 +2994,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gmll@npm:^3.2.1":
+"gmll@npm:^3.3.2":
   version: 3.3.2
   resolution: "gmll@npm:3.3.2"
   dependencies:
@@ -5246,6 +5246,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"umbrella-minecraft-launcher@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "umbrella-minecraft-launcher@workspace:."
+  dependencies:
+    "@mdi/js": ^7.2.96
+    "@morev/vue-transitions": ^2.3.6
+    "@types/nw.js": ^0.13.16
+    "@vitejs/plugin-vue": ^2.3.3
+    concurrently: ^7.2.2
+    electron: ^25.3.2
+    electron-builder: ^24.6.3
+    express: ^4.18.2
+    gmll: ^3.3.2
+    mdi-vue: ^3.0.13
+    msmc: ^4.1.0
+    nw-builder: ^4.1.1-beta.2
+    pinia: ^2.0.18
+    sass: ^1.60.0
+    typescript: ^4.5.4
+    v-click-outside: ^3.2.0
+    vite: ^2.9.9
+    vue: ^3.2.47
+    vue-i18n: ^9.6.1
+    vue-router: 4
+    vue-tsc: ^0.34.7
+    wait-on: ^7.0.1
+  languageName: unknown
+  linkType: soft
+
 "unctx@npm:^2.3.1":
   version: 2.3.1
   resolution: "unctx@npm:2.3.1"
@@ -5420,35 +5449,6 @@ __metadata:
   checksum: 690a8d6ad5a4001672290e9719e3107c86269bc45fe19f844758eecf502e59f8aa9631b19b839f6d3dea562334884d22d1eb95ae7c863032075a9212c889e116
   languageName: node
   linkType: hard
-
-"vite-vue3-electron-ts-template@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "vite-vue3-electron-ts-template@workspace:."
-  dependencies:
-    "@mdi/js": ^7.2.96
-    "@morev/vue-transitions": ^2.3.6
-    "@types/nw.js": ^0.13.16
-    "@vitejs/plugin-vue": ^2.3.3
-    concurrently: ^7.2.2
-    electron: ^25.3.2
-    electron-builder: ^24.6.3
-    express: ^4.18.2
-    gmll: ^3.2.1
-    mdi-vue: ^3.0.13
-    msmc: ^4.1.0
-    nw-builder: ^4.1.1-beta.2
-    pinia: ^2.0.18
-    sass: ^1.60.0
-    typescript: ^4.5.4
-    v-click-outside: ^3.2.0
-    vite: ^2.9.9
-    vue: ^3.2.47
-    vue-i18n: ^9.6.1
-    vue-router: 4
-    vue-tsc: ^0.34.7
-    wait-on: ^7.0.1
-  languageName: unknown
-  linkType: soft
 
 "vite@npm:^2.9.9":
   version: 2.9.16

@@ -2,54 +2,44 @@
 import VButton from "@/components/VButton.vue";
 import { useAccountManager } from "@/stores/accountManager";
 import { useI18n } from "vue-i18n";
-import type _msmc from "msmc";
 import { ref } from "vue";
 import PlayerHead from "@/components/PlayerHead.vue";
 import LoadingOverlay from "@/components/LoadingOverlay.vue";
+import { IpcWindow } from "@/lib/ipcWindow";
 
-const msmc = require("msmc");
-
+declare let window: IpcWindow;
 const { t } = useI18n();
 const accountManager = useAccountManager();
-const authManager: _msmc.Auth = new msmc.Auth("select_account");
 const loading = ref(false);
 
 async function addAccount() {
     loading.value = true;
     try {
-        const xboxManager = await authManager.launch("nwjs");
-        const minecraft = await xboxManager.getMinecraft();
-        const token = minecraft.getToken(true);
-        accountManager.add(token);
-        await accountManager.save();
+        await window.ipcRenderer.invoke("main:accountManager.linkAccount");
     } catch (err) {
         console.error("Error adding account:", err);
     }
+    loading.value = false;
+}
+
+async function removeAccount(id: string) {
+    loading.value = true;
+    await window.ipcRenderer.invoke("main:accountManager.remove", id);
     loading.value = false;
 }
 </script>
 
 <template>
     <div class="accounts">
-        <v-button
-            variant="primary"
-            icon="plus"
-            class="add"
-            @click="addAccount"
-            >{{ t("accounts.add") }}</v-button
-        >
+        <v-button variant="primary" icon="plus" class="add" @click="addAccount">{{ t("accounts.add") }}</v-button>
 
-        <div
-            class="account"
-            v-for="account in accountManager.accounts"
-            :key="account.profile.id"
-        >
-            <player-head :uuid="account.profile.id" class="head" />
+        <div class="account" v-for="account in accountManager.accounts" :key="account.id">
+            <player-head :uuid="account.id" class="head" />
             <div class="info">
-                <span class="username">{{ account.profile.name }}</span>
+                <span class="username">{{ account.name }}</span>
                 <span class="type">{{ t("accounts.type.microsoft") }}</span>
             </div>
-            <v-button icon="delete" variant="danger" icon-size="35" />
+            <v-button icon="delete" variant="danger" icon-size="35" @click="removeAccount(account.id)" />
         </div>
 
         <div class="no-accounts" v-if="accountManager.accounts.length == 0">
