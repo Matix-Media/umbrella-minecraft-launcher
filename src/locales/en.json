@@ -1,0 +1,32 @@
+{
+    "loading": {
+        "starting": "Starting...",
+        "accounts": "Loading accounts...",
+        "minecraft": "Loading Minecraft..."
+    },
+    "play": {
+        "title": "Play",
+        "play": "Play",
+        "noAccountAdded": "No accounts added!",
+        "moreAccountsRequired": "You need at least two accounts to switch between them!"
+    },
+    "profiles": {
+        "title": "Profiles",
+        "noProfiles": "You haven't added any profiles yet.",
+        "add": "Add",
+        "type": {
+            "minecraft": "Minecraft"
+        }
+    },
+    "accounts": {
+        "title": "Accounts",
+        "noAccounts": "You haven't added any accounts yet.",
+        "add": "Add",
+        "type": {
+            "microsoft": "Microsoft"
+        }
+    },
+    "settings": {
+        "title": "Settings"
+    }
+}

@@ -1,36 +1,23 @@
-<script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from "./components/HelloWorld.vue";
-</script>
+<template><router-view /></template>
 
-<template>
-  <img alt="Vite logo" width="120" src="./assets/vite.svg" />
-  <img alt="Vue logo" width="120" src="./assets/logo.png" />
-  <img alt="Electron logo" width="120" src="./assets/electron.png" />
-  <img alt="TS logo" width="120" src="./assets/ts.png" />
-  <HelloWorld msg="Vite + Vue 3 + Electron + TypeScript" />
-  <br />
-  <p class="plugins">Plugins</p>
-  <img alt="vue router logo" width="120" src="./assets/vueRouter.png" />
-  <img alt="pinia logo" width="120" src="./assets/pinia.svg" />
-</template>
+<style lang="scss">
+@import "@/assets/css/variables.css";
+@import "@/assets/fonts/Inter/Inter.css";
 
-<style>
+body,
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+    min-height: 100vh;
+    margin: 0;
+    position: relative;
 }
-img {
-  margin: 5px;
+
+body,
+button,
+input {
+    font-family: "Inter", sans-serif;
 }
-.plugins {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 20px;
+
+button {
+    cursor: pointer;
 }
 </style>
