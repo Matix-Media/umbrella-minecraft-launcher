@@ -25,7 +25,7 @@ async function createInstance() {
     if (name.value.trim().length == 0) return;
 
     loading.value = true;
-    await instanceManager.create({ name: name.value });
+    await instanceManager.createInstance({ name: name.value });
     addInstanceOpen.value = false;
     setTimeout(() => (loading.value = false), 1000);
 }
@@ -33,27 +33,17 @@ async function createInstance() {
 
 <template>
     <div class="instances">
-        <v-button
-            variant="primary"
-            icon="plus"
-            class="add"
-            @click="showAddInstance"
-            >{{ t("profiles.add") }}</v-button
-        >
+        <v-button variant="primary" icon="plus" class="add" @click="showAddInstance">
+            {{ t("profiles.add") }}
+        </v-button>
 
-        <div
-            class="account"
-            v-for="instance in instanceManager.instances"
-            :key="instance.instance.getID()"
-        >
+        <div class="instance" v-for="instance in instanceManager.instances" :key="instance.name">
             <div class="info">
-                <span class="name">{{ instance.instance.getName() }}</span>
+                <span class="name">{{ instance.name }}</span>
                 <span class="type">{{ t("profiles.type.minecraft") }}</span>
-                <span class="version">{{
-                    instance.instance.getVersion()
-                }}</span>
+                <span class="version">{{ instance.version }}</span>
             </div>
-            <v-button icon="delete" variant="danger" icon-size="35" />
+            <v-button class="delete" icon="delete" variant="danger" icon-size="35" />
         </div>
 
         <div class="no-instances" v-if="instanceManager.instances.length == 0">
@@ -65,15 +55,9 @@ async function createInstance() {
         <form class="add-instance" @submit.prevent="createInstance">
             <label>
                 <p class="label">Name</p>
-                <v-text
-                    v-model="name"
-                    ref="nameBox"
-                    placeholder="e.g.: My Profile"
-                />
+                <v-text v-model="name" ref="nameBox" placeholder="e.g.: My Profile" />
             </label>
-            <v-button variant="primary" icon="plus" class="add">
-                Create
-            </v-button>
+            <v-button variant="primary" icon="plus" class="add"> Create </v-button>
         </form>
     </overlay>
     <loading-overlay :loading="loading" />
@@ -122,33 +106,48 @@ async function createInstance() {
     .instance {
         display: grid;
         align-items: center;
-        grid-template-columns: auto 1fr auto;
+        grid-template-columns: 1fr auto;
         padding: 6px;
+        padding-left: 15px;
         background-color: var(--bg-2);
         border-radius: 4px;
         color: white;
         margin-bottom: 10px;
+        grid-template-columns: auto auto 1fr;
 
         .info {
-            display: flex;
+            display: grid;
             flex-direction: column;
 
             .name {
                 font-weight: 500;
                 font-size: 16px;
+                grid-row: 1 / 1;
+                grid-column: 1 / 4;
             }
 
             .type {
+                margin-top: 1px;
                 font-weight: 400;
                 font-size: 12px;
                 color: rgba(255, 255, 255, 0.5);
+                grid-row: 2 / 2;
+                grid-column: 1 / 1;
             }
 
             .version {
                 padding: 1px;
+                font-size: 12px;
                 background-color: var(--secondary);
                 color: rgba(255, 255, 255, 0.5);
+                border-radius: 4px;
+                grid-row: 2 / 2;
+                margin-left: 5px;
             }
+        }
+
+        .delete {
+            grid-column: 4 / 4;
         }
     }
 }

@@ -57,8 +57,7 @@ export default class InstanceManager {
             InstanceManager.INSTANCES_FILE,
             JSON.stringify(
                 this.instances.map((instance) => ({
-                    id: instance.instance.getID(),
-                    name: instance.instance.getName(),
+                    name: instance.instance.name,
                     selected: instance.selected,
                 })),
             ),
@@ -73,7 +72,6 @@ export default class InstanceManager {
 
         const instances = Instance.getProfiles();
         let selectedStates: Array<{
-            id: string;
             name: string;
             selected: boolean;
         }> = [];
@@ -85,10 +83,20 @@ export default class InstanceManager {
         for (const [name, getter] of instances) {
             InstanceManager.LOGGER.log("Loading instance:", name, `(${getter.path ?? "unknown location"})`);
             const instance = getter.get();
-            if (this.instances.find((_instance) => _instance.instance.getID() == instance.getID()))
+            InstanceManager.LOGGER.log(instance.name);
+            let existingInstance = this.instances.find((_instance) => _instance.instance.name == instance.name);
+            if (existingInstance != null) {
                 InstanceManager.LOGGER.log("Skipping, instance already loaded");
+                this.webContents.send("renderer:instanceManager.add", {
+                    name: existingInstance.instance.name,
+                    selected: existingInstance.selected,
+                    version: existingInstance.instance.version,
+                    loader: "vanilla",
+                } as RendererInstance);
+                continue;
+            }
 
-            const selected = selectedStates.find((state) => state.id == instance.getID())?.selected ?? false;
+            const selected = selectedStates.find((state) => state.name == instance.name)?.selected ?? false;
 
             this.add({
                 instance,

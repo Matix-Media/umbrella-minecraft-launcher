@@ -19,6 +19,15 @@ export const useInstanceManager = defineStore("instanceManager", () => {
 
     const selected = computed(() => instances.value.find((_instance) => _instance.selected));
 
+    window.ipcRenderer.receive("renderer:instanceManager.add", (instance: RendererInstance) => {
+        instances.value.push(instance);
+    });
+
+    window.ipcRenderer.receive("renderer:instanceManager.remove", (name: string) => {
+        const i = instances.value.findIndex((_instance) => _instance.name === name);
+        instances.value.splice(i, 1);
+        instances.value = instances.value;
+    });
+
     return { instances, load, createInstance, selected };
 });
-
