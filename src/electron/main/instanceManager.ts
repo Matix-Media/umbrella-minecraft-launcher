@@ -4,7 +4,7 @@ import { Instance, init } from "gmll";
 import path from "path";
 import fs from "fs/promises";
 import { setRoot } from "gmll/config";
-import { Loader, RendererInstance } from "../../types/instances";
+import { Loader, RendererInstance, Version } from "../../types/instances";
 import { LaunchOptions } from "gmll/types";
 import { XMLParser } from "fast-xml-parser";
 
@@ -14,6 +14,7 @@ export default class InstanceManager {
     private static readonly LOGGER = new Logger("InstanceManager");
     private static readonly MC_VERSION_MANIFEST = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
     private static readonly FORGE_VERSION_MANIFEST = "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml";
+    private static readonly FABRIC_VERSION_MANIFEST = "https://meta.fabricmc.net/v2/versions/loader";
 
     private readonly webContents: WebContents;
     public readonly instances: InstanceSelectionState[] = [];
@@ -33,6 +34,9 @@ export default class InstanceManager {
         });
         ipcMain.handle("main:instanceManager.save", async (event) => {
             await this.save();
+        });
+        ipcMain.handle("main:instanceManager.versions", async (event) => {
+            return this.versions;
         });
     }
 
@@ -151,6 +155,12 @@ export default class InstanceManager {
             const [forVersion, forgeVersion] = version.split("-");
             this.versions.push({ loader: "forge", version: forgeVersion, forVersion });
         }
+
+        console.log("Loading fabric versions");
+        const fabricVersions: FabricVersionManifest = await (await fetch(InstanceManager.FABRIC_VERSION_MANIFEST)).json();
+        for (const version of fabricVersions) {
+            this.versions.push({ loader: "fabric", version: version.version });
+        }
     }
 }
 
@@ -183,13 +193,15 @@ interface ForgeVersionManifest {
     };
 }
 
+type FabricVersionManifest = Array<{
+    seperator: string;
+    build: number;
+    maven: string;
+    version: string;
+    stable: boolean;
+}>;
+
 export interface InstanceSelectionState {
     instance: Instance;
     selected: boolean;
-}
-
-export interface Version {
-    loader: Loader;
-    version: string;
-    forVersion: string;
 }

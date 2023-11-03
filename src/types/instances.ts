@@ -6,3 +6,9 @@ export interface RendererInstance {
 }
 
 export type Loader = "vanilla" | "fabric" | "forge";
+
+export interface Version {
+    loader: Loader;
+    version: string;
+    forVersion?: string;
+}
