@@ -150,7 +150,6 @@ export default class InstanceManager {
         console.log("Loading forge versions");
         const forgeVersionsText = await (await fetch(InstanceManager.FORGE_VERSION_MANIFEST)).text();
         const forgeVersions: ForgeVersionManifest = new XMLParser().parse(forgeVersionsText);
-        console.log(forgeVersions.metadata.versioning.versions);
         for (const version of forgeVersions.metadata.versioning.versions.version) {
             const [forVersion, forgeVersion] = version.split("-");
             this.versions.push({ loader: "forge", version: forgeVersion, forVersion });
