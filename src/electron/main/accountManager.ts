@@ -34,23 +34,26 @@ export default class AccountManager {
 
     public async select(id: string) {
         let previouslySelected: Account | undefined;
-        let foundAccount = false;
+        let nowSelected: Account | undefined;
         for (const account of this.accounts) {
             if (account.selected) previouslySelected = account;
             if (account.profile.id === id) {
                 account.selected = true;
-                foundAccount = true;
+                nowSelected = account;
             } else {
                 account.selected = false;
             }
         }
-        if (!foundAccount) {
+        if (nowSelected == null) {
             if (previouslySelected != null) {
                 previouslySelected.selected = true;
+                nowSelected = previouslySelected;
             } else if (this.accounts.length > 0) {
                 this.accounts[0].selected = true;
+                nowSelected = this.accounts[0];
             }
         }
+        if (nowSelected != null) this.webContents.send("renderer:accountManager.select", nowSelected.profile.id);
         await this.save();
     }
 
@@ -72,6 +75,9 @@ export default class AccountManager {
         const i = this.accounts.findIndex((_account) => _account.profile.id === id);
         this.accounts.splice(i, 1);
         this.webContents.send("renderer:accountManager.remove", id);
+        if (this.accounts.length > 0) {
+            this.select(this.accounts[0].profile.id);
+        }
         await this.save();
     }
 

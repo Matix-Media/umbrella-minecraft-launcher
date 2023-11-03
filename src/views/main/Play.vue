@@ -20,6 +20,10 @@ async function selectAccount(id: string) {
     await accountManager.select(id);
     selectAccountOpen.value = false;
 }
+
+async function selectInstance(name: string) {
+    await instanceManager.select(name);
+}
 </script>
 
 <template>
@@ -47,9 +51,14 @@ async function selectAccount(id: string) {
                 <div class="profile">
                     <button class="start">
                         <span class="action">{{ t("play.play") }}</span>
-                        <span class="instance">{{ instanceManager.selected?.name }}</span>
+                        <span class="instance">{{ instanceManager.selected?.name ?? instanceManager.instances[0]?.name }}</span>
                     </button>
-                    <button class="dropdown">
+                    <button
+                        class="dropdown"
+                        @mouseup="selectProfileOpen = true"
+                        :disabled="instanceManager.instances.length <= 1"
+                        :title="instanceManager.instances.length <= 1 ? t('play.moreProfilesRequired') : ''"
+                    >
                         <mdicon name="menu-down" size="45" />
                     </button>
                 </div>
@@ -70,6 +79,20 @@ async function selectAccount(id: string) {
             >
                 <player-head class="head" :uuid="account.id" />
                 <span>{{ account.name }}</span>
+            </div>
+        </div>
+    </overlay>
+    <overlay v-model="selectProfileOpen" class="">
+        <div class="select-popup select-instance">
+            <div
+                class="instance-item"
+                v-for="instance in instanceManager.instances"
+                @click="selectInstance(instance.name)"
+                :class="{
+                    selected: instance.name == instanceManager.selected?.name,
+                }"
+            >
+                <span>{{ instance.name }}</span>
             </div>
         </div>
     </overlay>

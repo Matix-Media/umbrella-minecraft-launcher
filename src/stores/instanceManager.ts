@@ -13,6 +13,10 @@ export const useInstanceManager = defineStore("instanceManager", () => {
         await window.ipcRenderer.invoke("main:instanceManager.load");
     }
 
+    async function select(name: string) {
+        await window.ipcRenderer.invoke("main:instanceManager.select", name);
+    }
+
     async function createInstance(options: gmll.types.LaunchOptions) {
         await window.ipcRenderer.invoke("main:instanceManager.createInstance", options);
     }
@@ -29,5 +33,10 @@ export const useInstanceManager = defineStore("instanceManager", () => {
         instances.value = instances.value;
     });
 
-    return { instances, load, createInstance, selected };
+    window.ipcRenderer.receive("renderer:instanceManager.select", (name: string) => {
+        const instance = instances.value.find((_instance) => _instance.name === name);
+        if (instance != null) instance.selected = true;
+    });
+
+    return { instances, load, select, createInstance, selected };
 });

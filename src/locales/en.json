@@ -8,7 +8,8 @@
         "title": "Play",
         "play": "Play",
         "noAccountAdded": "No accounts added!",
-        "moreAccountsRequired": "You need at least two accounts to switch between them!"
+        "moreAccountsRequired": "You need at least two accounts to switch between them!",
+        "moreProfilesRequired": "You need at least two profiles to switch between them!"
     },
     "profiles": {
         "title": "Profiles",

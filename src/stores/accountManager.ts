@@ -32,5 +32,10 @@ export const useAccountManager = defineStore("accountManager", () => {
         accounts.value = accounts.value;
     });
 
+    window.ipcRenderer.receive("renderer:accountManager.select", (id: string) => {
+        const account = accounts.value.find((_account) => _account.id === id);
+        if (account != null) account.selected = true;
+    });
+
     return { accounts, load, select, remove, selected };
 });

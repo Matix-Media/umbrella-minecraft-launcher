@@ -21,12 +21,40 @@ export default class InstanceManager {
         ipcMain.handle("main:instanceManager.load", async (event) => {
             await this.load();
         });
+        ipcMain.handle("main:instanceManager.select", async (event, name) => {
+            await this.select(name);
+        });
         ipcMain.handle("main:instanceManager.createInstance", async (event, options) => {
             await this.createInstance(options);
         });
         ipcMain.handle("main:instanceManager.save", async (event) => {
             await this.save();
         });
+    }
+
+    public async select(name: string) {
+        let previouslySelected: InstanceSelectionState | undefined;
+        let nowSelected: InstanceSelectionState | undefined;
+        for (const instance of this.instances) {
+            if (instance.selected) previouslySelected = instance;
+            if (instance.instance.name === name) {
+                instance.selected = true;
+                nowSelected = instance;
+            } else {
+                instance.selected = false;
+            }
+        }
+        if (nowSelected == null) {
+            if (previouslySelected != null) {
+                previouslySelected.selected = true;
+                nowSelected = previouslySelected;
+            } else if (this.instances.length > 0) {
+                this.instances[0].selected = true;
+                nowSelected = this.instances[0];
+            }
+        }
+        if (nowSelected != null) this.webContents.send("renderer:instanceManager.select", nowSelected.instance.name);
+        await this.save();
     }
 
     public async createInstance(options: LaunchOptions) {
