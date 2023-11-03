@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import type * as gmll from "gmll";
 import { IpcWindow } from "@/lib/ipcWindow";
 import { computed, ref } from "vue";
-import { RendererInstance } from "@/types/instances";
+import { RendererInstance, Version } from "@/types/instances";
 
 declare let window: IpcWindow;
 
@@ -19,6 +19,10 @@ export const useInstanceManager = defineStore("instanceManager", () => {
 
     async function createInstance(options: gmll.types.LaunchOptions) {
         await window.ipcRenderer.invoke("main:instanceManager.createInstance", options);
+    }
+
+    async function getVersions(): Promise<Version[]> {
+        return await window.ipcRenderer.invoke("main:instanceManager.versions");
     }
 
     const selected = computed(() => instances.value.find((_instance) => _instance.selected));
@@ -38,5 +42,5 @@ export const useInstanceManager = defineStore("instanceManager", () => {
         if (instance != null) instance.selected = true;
     });
 
-    return { instances, load, select, createInstance, selected };
+    return { instances, load, select, createInstance, getVersions, selected };
 });
