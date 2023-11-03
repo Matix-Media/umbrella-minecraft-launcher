@@ -2,5 +2,7 @@ export interface RendererInstance {
     name: string;
     selected: boolean;
     version: string;
-    loader: "vanilla" | "fabric" | "forge";
+    loader: Loader;
 }
+
+export type Loader = "vanilla" | "fabric" | "forge";

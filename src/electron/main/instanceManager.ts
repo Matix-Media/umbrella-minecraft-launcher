@@ -1,19 +1,23 @@
 import Logger from "../../lib/Logger";
 import { WebContents, app, ipcMain } from "electron";
 import { Instance, init } from "gmll";
-import { LaunchOptions } from "gmll/types";
 import path from "path";
 import fs from "fs/promises";
 import { setRoot } from "gmll/config";
-import { RendererInstance } from "../../types/instances";
+import { Loader, RendererInstance } from "../../types/instances";
+import { LaunchOptions } from "gmll/types";
+import { XMLParser } from "fast-xml-parser";
 
 export default class InstanceManager {
     private static readonly SAVE_DIR = path.join(app.getPath("userData"), ".gmll");
     private static readonly INSTANCES_FILE = path.join(app.getPath("userData"), "instance.json");
     private static readonly LOGGER = new Logger("InstanceManager");
+    private static readonly MC_VERSION_MANIFEST = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
+    private static readonly FORGE_VERSION_MANIFEST = "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml";
 
     private readonly webContents: WebContents;
     public readonly instances: InstanceSelectionState[] = [];
+    public readonly versions: Version[] = [];
 
     constructor(webContents: WebContents) {
         this.webContents = webContents;
@@ -131,10 +135,61 @@ export default class InstanceManager {
                 selected,
             });
         }
+
+        console.log("Loading available versions");
+        console.log("Loading vanilla versions");
+        const mcVersions: MCVersionManifest = await (await fetch(InstanceManager.MC_VERSION_MANIFEST)).json();
+        for (const version of mcVersions.versions) {
+            this.versions.push({ loader: "vanilla", version: version.id, forVersion: version.id });
+        }
+
+        console.log("Loading forge versions");
+        const forgeVersionsText = await (await fetch(InstanceManager.FORGE_VERSION_MANIFEST)).text();
+        const forgeVersions: ForgeVersionManifest = new XMLParser().parse(forgeVersionsText);
+        console.log(forgeVersions.metadata.versioning.versions);
+        for (const version of forgeVersions.metadata.versioning.versions.version) {
+            const [forVersion, forgeVersion] = version.split("-");
+            this.versions.push({ loader: "forge", version: forgeVersion, forVersion });
+        }
     }
+}
+
+interface MCVersionManifest {
+    latest: {
+        release: string;
+        snapshot: string;
+    };
+    versions: Array<{
+        id: string;
+        type: "snapshot" | "release";
+        url: string;
+        time: string;
+        releaseTime: string;
+    }>;
+}
+
+interface ForgeVersionManifest {
+    metadata: {
+        groupId: string;
+        artifactId: string;
+        versioning: {
+            release: string;
+            latest: string;
+            lastUpdated: string;
+            versions: {
+                version: Array<string>;
+            };
+        };
+    };
 }
 
 export interface InstanceSelectionState {
     instance: Instance;
     selected: boolean;
+}
+
+export interface Version {
+    loader: Loader;
+    version: string;
+    forVersion: string;
 }
