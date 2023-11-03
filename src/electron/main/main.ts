@@ -11,9 +11,11 @@ function createWindow() {
     // Create the browser window
     logger.log("Loading preload from", join(__dirname, "./preload/preload.js"));
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 906,
+        height: 551,
         autoHideMenuBar: true,
+        resizable: false,
+        fullscreenable: false,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
