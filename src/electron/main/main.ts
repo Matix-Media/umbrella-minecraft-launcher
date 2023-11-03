@@ -10,7 +10,6 @@ const logger = new Logger("Window");
 function createWindow() {
     // Create the browser window
     logger.log("Loading preload from", join(__dirname, "./preload/preload.js"));
-    console.log("test");
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
