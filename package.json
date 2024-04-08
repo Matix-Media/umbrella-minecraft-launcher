@@ -31,7 +31,7 @@
         "@mdi/js": "^7.2.96",
         "@morev/vue-transitions": "^2.3.6",
         "@types/nw.js": "^0.13.16",
-        "express": "^4.18.2",
+        "express": "^4.19.2",
         "gmll": "^3.2.1",
         "mdi-vue": "^3.0.13",
         "msmc": "^4.1.0",
